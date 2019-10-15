@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api
+    
+  template:
+    metadata:
+      labels:
+        app: api
+    
+    spec:
+      containers:
+      - name: api
+        image: nexusrepo.ggkswat.ga/swatapi:latest
+        imagePullPolicy: Always
+        env:
+          - name: S3_BUCKET_NAME
+            value: chanduswatk8s22
+          - name: KAFKA_HOST
+            value: kafkabroker.ggkswat.ga:9092
+          - name: KAFKA_IMAGE_ANALYSIS_TOPIC
+            value: ChanduImageAnalysis
+          - name: KAFKA_IMAGE_THUMBNAIL_TOPIC
+            value: ChanduThumbnail
+          - name: MONGO_URL
+            value: mongodb://db.ggkswat.ga
+          - name: MONGO_DB_NAME
+            value: ChanduDB
+          - name: MONGO_COLLECTION_NAME
+            value: ChanduCollection
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000
+      imagePullSecrets:
+        - name: chandu-docker
+

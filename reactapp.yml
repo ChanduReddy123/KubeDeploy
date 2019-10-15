@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactapp
+spec:
+  selector:
+    matchLabels:
+      app: reactapp
+  template:
+    metadata:
+      labels:
+        app: reactapp
+    spec:
+      containers:
+      - name: reactapp
+        image: nexusrepo.ggkswat.ga/chandureact:1.0  
+        imagePullPolicy: Always
+        env:
+          - name: REACT_APP_BASE_URL
+            value: "http://api"
+          - name: REACT_APP_S3_REGION
+            value: ap-south-1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 9000
+      imagePullSecrets:
+        - name: chandu-docker
